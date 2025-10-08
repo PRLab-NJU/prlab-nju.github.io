@@ -2,7 +2,7 @@
 layout: person
 name: "Yan Huang"
 image: "/assets/people/yanhuang.png"
-title: "Research Professor"
+title: "Associate Research Professor"
 category: "Adjunct Faculty"
 links:
   - link: "https://scholar.google.com/citations?user=6nUJrQ0AAAAJ"

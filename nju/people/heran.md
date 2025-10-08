@@ -2,7 +2,7 @@
 layout: person
 name: "Ran He"
 image: "/assets/people/ranhe.png"
-title: "Associate Research Professor"
+title: "Research Professor"
 category: "Adjunct Faculty"
 links:
   - link: "https://scholar.google.com/citations?user=ayrg9AUAAAAJ"
