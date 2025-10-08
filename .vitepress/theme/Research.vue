@@ -231,13 +231,31 @@ onUnmounted(() => {
 
 .main-title {
     font-family: 'Poppins', sans-serif;
-    font-size: 6rem;
+    font-size: 3rem;
     font-weight: 500;
     margin: 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+}
+
+@media (min-width: 640px) {
+    .main-title {
+        font-size: 4rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .main-title {
+        font-size: 5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .main-title {
+        font-size: 6rem;
+    }
 }
 
 .research-aims p {
