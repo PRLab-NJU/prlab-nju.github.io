@@ -10,7 +10,7 @@ export default {
     },
     methods: {
         categorizeAlumni(alumni) {
-            const titles = ["Postdoc", "Graduate Student", "Staff Member", "Undergraduate Researcher"];
+            const titles = ["Doctoral Student", "Master Student"];
             const alumniCategories = {};
             titles.forEach(title => {
                 alumniCategories[title] = alumni.filter(a => a.title === title);
@@ -25,7 +25,7 @@ export default {
     <div>
         <!-- <div class="w-full border-t border-gray-200"></div> -->
         
-        <div v-for=" title in ['Postdoc', 'Graduate Student', 'Staff Member', 'Undergraduate Researcher']" :key="title">
+        <div v-for=" title in ['Doctoral Student', 'Master Student']" :key="title">
             <div class="alumni-section my-8">
                 <div class="pt-8 pb-10 space-y-2 md:space-y-5">
                     <h1
