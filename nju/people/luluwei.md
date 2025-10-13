@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Lulu Wei"
-image: "/assets/people/cat.jpg"
+image: "/assets/people/luluwei.jpg"
 title: "Management Team"
 category: "Management Team"
 links:

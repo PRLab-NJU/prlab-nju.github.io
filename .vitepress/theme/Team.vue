@@ -55,22 +55,33 @@ export default {
             return result;
         },
         sortFacultyMembers(facultyMembers) {
-            const rankOrder = {
-                'Professor': 1,
-                'Associate Professor': 2,
-                'Assistant Professor': 3,
-            };
+            // 定义Fulltime Faculty的固定排序顺序
+            const customOrder = [
+                'Caifeng Shan',
+                'Fang Zhao',
+                'Ke Xu',
+                'Shuai Wang',
+                'Yanbo Fan',
+                'Yuqi Fang',
+                'Yueming Lv',
+                'Chaoyou Fu',
+                'Chenyang Si'
+            ];
             
             return facultyMembers.sort((a, b) => {
-                // 首先按title中的职位排序
-                const rankA = rankOrder[a.title] || 999;
-                const rankB = rankOrder[b.title] || 999;
+                const indexA = customOrder.indexOf(a.name);
+                const indexB = customOrder.indexOf(b.name);
                 
-                if (rankA !== rankB) {
-                    return rankA - rankB;
+                // 如果两个名字都在自定义顺序中，按自定义顺序排序
+                if (indexA !== -1 && indexB !== -1) {
+                    return indexA - indexB;
                 }
                 
-                // 职位相同时按姓名排序
+                // 如果只有一个名字在自定义顺序中，优先显示
+                if (indexA !== -1) return -1;
+                if (indexB !== -1) return 1;
+                
+                // 如果都不在自定义顺序中，按姓名排序
                 return a.name.localeCompare(b.name);
             });
         },
@@ -156,6 +167,13 @@ export default {
         },
         switchTab(tab) {
             this.activeTab = tab;
+        },
+        getMemberImage(member) {
+            return member.image || '/assets/people/scholar.png';
+        },
+        handleImageError(event) {
+            // 如果图片加载失败，替换为默认头像
+            event.target.src = '/assets/people/scholar.png';
         }
     }
 }
@@ -225,9 +243,10 @@ export default {
                                 <!-- Image Section -->
                                 <div class="w-48 flex-shrink-0">
                                     <img 
-                                        :src="member.image || '/assets/people/default.jpg'" 
+                                        :src="getMemberImage(member)" 
                                         :alt="member.name" 
                                         class="w-48 h-60 object-cover rounded-lg shadow-lg"
+                                        @error="handleImageError"
                                     />
                                     <!-- Social Links -->
                                     <div v-if="member.links" class="flex justify-center gap-2 mt-4">

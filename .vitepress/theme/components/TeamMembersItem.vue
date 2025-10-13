@@ -16,7 +16,14 @@ export default {
         //     if (url) {
         //         window.location.href = url;
         //     }
-        // }
+        // },
+        getMemberImage(member) {
+            return member.image || '/assets/people/scholar.png';
+        },
+        handleImageError(event) {
+            // 如果图片加载失败，替换为默认头像
+            event.target.src = '/assets/people/scholar.png';
+        }
     }
 }
 </script>
@@ -26,7 +33,7 @@ export default {
         class="hover:shadow-lg hover:shadow-custom-orange flex flex-col gap-px rounded-lg w-full h-full overflow-hidden transition-shadow duration-300 ease-in-out">
         <div class="py-6 px-4 sm:py-8 sm:px-6 flex-grow bg-custom-soft">
             <figure class="relative shrink-0 mx-auto w-36 h-36 rounded-full overflow-hidden shadow">
-                <img class="absolute inset-0 w-full h-full object-cover" :src="member.image" :alt="member.name" />
+                <img class="absolute inset-0 w-full h-full object-cover" :src="getMemberImage(member)" :alt="member.name" @error="handleImageError" />
             </figure>
             <div class="text-center pt-6">
                 <h1 class="m-0 text-gray-800 font-semibold tracking-wide leading-7 text-lg ease-in-out">
