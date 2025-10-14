@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Xinyue Cai"
-image: "/assets/people/xinyuecai.jpg"
+image: "/assets/people/caixinyue.jpg"
 title: "Master Student"
 category: "Student"
 links:
