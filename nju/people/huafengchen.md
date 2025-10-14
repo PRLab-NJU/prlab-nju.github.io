@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Huafeng Chen"
-image: "/assets/people/huafengchen.jpg"
+image: "/assets/people/chenhuafeng.jpg"
 title: "Doctoral Student"
 category: "Student"
 links:
