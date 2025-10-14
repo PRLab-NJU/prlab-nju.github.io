@@ -123,11 +123,11 @@ onUnmounted(() => {
                 <!-- Multimodal Research -->
                 <div class="group multimodal-bg rounded-lg border border-gray-200 p-8 hover:border-purple-300 hover:shadow-md transition-all duration-300 research-card" ref="multimodalCard">
                     <div class="border-l-4 border-purple-500 pl-6 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Multimodal AI</h3>
-                        <div class="text-sm text-purple-600 font-medium uppercase tracking-wide">Cross-Modal Learning</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Data Intelligence</h3>
+                        <div class="text-sm text-purple-600 font-medium uppercase tracking-wide">Visual Analytics</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        Integration of visual, auditory, and textual information processing. Our research spans cross-modal learning, vision-language understanding, and multimodal fusion techniques that enable AI systems to process and understand complex real-world scenarios.
+                        Empowering human-data experience through intelligent visual analytics. Our research integrates AI, visualization, and interaction design to enhance understanding, trust, and decision-making in large-scale data environments.
                     </p>
                 </div>
 
@@ -146,10 +146,10 @@ onUnmounted(() => {
                 <div class="group generative-bg rounded-lg border border-gray-200 p-8 hover:border-red-300 hover:shadow-md transition-all duration-300 research-card" ref="generativeCard">
                     <div class="border-l-4 border-red-500 pl-6 mb-6">
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">Generative AI</h3>
-                        <div class="text-sm text-red-600 font-medium uppercase tracking-wide">Content Creation</div>
+                        <div class="text-sm text-red-600 font-medium uppercase tracking-wide">CONTENT UNDERSTANDING & CREATION</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        Advanced generative models for content creation, including text, images, and videos. Our work encompasses large language models, diffusion models, and creative AI systems that push the boundaries of artificial creativity.
+                        Empowering AI to perceive and simulate the world, advancing toward more general world models. Our research spans multimodal understanding, image and video generation, and interaction with the physical world, pushing the boundaries of AGI.
                     </p>
                 </div>
 
@@ -171,7 +171,7 @@ onUnmounted(() => {
                         <div class="text-sm text-teal-600 font-medium uppercase tracking-wide">Healthcare Innovation</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        AI applications in healthcare and medical diagnosis. Our research includes medical image analysis, drug discovery, personalized medicine, and clinical decision support systems that improve patient outcomes and healthcare delivery.
+                        Al applications in healthcare and medical diagnosis. Our research spans medical data analysis, personalized medicine, brain–computer interface, and clinical decision support systems that improve patient outcomes and healthcare delivery.
                     </p>
                 </div>
             </div>

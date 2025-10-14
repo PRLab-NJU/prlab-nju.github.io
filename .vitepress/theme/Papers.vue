@@ -32,7 +32,7 @@ export default {
             return years.sort((a, b) => b - a); // 从新到旧排序
         },
         availableTopics() {
-            return ['Speech Technology', 'Multimodal AI', 'Embodied Intelligence', 'Generative AI', 'AI Safety', 'Medical AI'];
+            return ['Speech Technology', 'Data Intelligence', 'Embodied Intelligence', 'Generative AI', 'AI Safety', 'Medical AI','Multimodal AI'];
         }
     },
     methods: {
@@ -47,22 +47,24 @@ export default {
         getKeywordClass(keyword) {
             const keywordColors = {
                 'Speech Technology': 'text-blue-500 border-blue-500',
-                'Multimodal AI': 'text-purple-500 border-purple-500',
+                'Multimodal AI':'text-amber-500 border-amber-500' ,
                 'Embodied Intelligence': 'text-cyan-400 border-cyan-400',
                 'Generative AI': 'text-red-500 border-red-500',
                 'AI Safety': 'text-green-500 border-green-500',
-                'Medical AI': 'text-teal-500 border-teal-500'
+                'Medical AI': 'text-teal-500 border-teal-500',
+                'Data Intelligence': 'text-purple-500 border-purple-500'
             };
             return keywordColors[keyword] || 'text-gray-500 border-gray-500';
         },
         getKeywordBgClass(keyword) {
             const keywordBgColors = {
                 'Speech Technology': 'bg-blue-500',
-                'Multimodal AI': 'bg-purple-500',
+                'Multimodal AI': 'bg-amber-500',
                 'Embodied Intelligence': 'bg-cyan-400',
                 'Generative AI': 'bg-red-500',
                 'AI Safety': 'bg-green-500',
-                'Medical AI': 'bg-teal-500'
+                'Medical AI': 'bg-teal-500',
+                'Data Intelligence': 'bg-purple-500'
             };
             return keywordBgColors[keyword] || 'bg-gray-500';
         },
