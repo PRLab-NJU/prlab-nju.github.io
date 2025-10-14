@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Yu Bai"
-image: "/assets/people/yubai.jpg"
+image: "/assets/people/baiyu.jpg"
 title: "Master Student"
 category: "Student"
 links:
