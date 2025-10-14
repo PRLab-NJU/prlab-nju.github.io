@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Xin Liu"
-image: "/assets/people/liuxin.png"
+image: "/assets/people/liuxin.jpg"
 title: "Doctoral Student"
 category: "Student"
 links:
