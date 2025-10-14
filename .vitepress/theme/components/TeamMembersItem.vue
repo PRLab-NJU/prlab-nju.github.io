@@ -12,11 +12,6 @@ export default {
         }
     },
     methods: {
-        // navigate(url) {
-        //     if (url) {
-        //         window.location.href = url;
-        //     }
-        // },
         getMemberImage(member) {
             return member.image || '/assets/people/scholar.png';
         },
@@ -30,7 +25,8 @@ export default {
 
 <template>
     <article
-        class="hover:shadow-lg hover:shadow-custom-orange flex flex-col gap-px rounded-lg w-full h-full overflow-hidden transition-shadow duration-300 ease-in-out">
+        class="hover:shadow-lg hover:shadow-custom-orange flex flex-col gap-px rounded-lg w-full h-full overflow-hidden transition-shadow duration-300 ease-in-out cursor-pointer"
+        @click="$emit('member-click', member)">
         <div class="py-6 px-4 sm:py-8 sm:px-6 flex-grow bg-custom-soft">
             <figure class="relative shrink-0 mx-auto w-36 h-36 rounded-full overflow-hidden shadow">
                 <img class="absolute inset-0 w-full h-full object-cover" :src="getMemberImage(member)" :alt="member.name" @error="handleImageError" />

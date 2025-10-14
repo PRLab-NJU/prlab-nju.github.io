@@ -10,8 +10,14 @@ export default createContentLoader("/nju/people/*.md", {
         category: frontmatter.category,
         desc: frontmatter.desc,
         briefIntro: frontmatter['brief-intro'],
+        biography: frontmatter.biography,
         links: frontmatter.links,
         socials: frontmatter.socials,
+        phone: frontmatter.phone,
+        address: frontmatter.address,
+        office: frontmatter.office,
+        email: frontmatter.email,
+        emails: frontmatter.emails,
         url,
       }))
       .sort((a, b) => new Date(b.date) - new Date(a.date));

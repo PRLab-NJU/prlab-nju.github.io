@@ -2,6 +2,7 @@
 import { data as people } from './people.data.js';
 import TeamMembers from './components/TeamMembers.vue';
 import SocialLink from './components/SocialLink.vue';
+import PersonDetail from './components/PersonDetail.vue';
 import Alumni from './Alumni.vue';
 import Nav from './components/Nav.vue'
 import Footer from './components/Footer.vue'
@@ -11,6 +12,7 @@ export default {
     components: {
         TeamMembers,
         SocialLink,
+        PersonDetail,
         Alumni,
         Nav,
         Footer,
@@ -21,19 +23,52 @@ export default {
         return {
             categories: this.getOrderedCategories(categorizedData),
             membersByCategory: categorizedData,
-            activeTab: 'team'
+            activeTab: 'faculty',
+            selectedMember: null,
+            showPersonDetail: false,
+            savedScrollPosition: 0
         };
+    },
+    computed: {
+        facultyCategories() {
+            const facultyCategoryOrder = [
+                'Principal Investigator',
+                'Fulltime Faculty',
+                'Adjunct Faculty',
+                'Research Assistant',
+                'Management Team'
+            ];
+            
+            return facultyCategoryOrder.filter(category => this.membersByCategory[category]);
+        },
+        studentCategories() {
+            const studentCategoryOrder = [
+                'Doctoral Student',
+                'Master Student'
+            ];
+            
+            return studentCategoryOrder.filter(category => this.membersByCategory[category]);
+        }
     },
     methods: {
         categorizeMembers(people) {
             const result = people
                 .filter(person => person.url.endsWith('.html'))
                 .reduce((acc, person) => {
-                    // 直接使用category字段，不再合并
-                    if (!acc[person.category]) {
-                        acc[person.category] = [];
+                    // 对于Student分类，按照title字段进一步细分
+                    if (person.category === 'Student') {
+                        const studentCategory = person.title === 'Doctoral Student' ? 'Doctoral Student' : 'Master Student';
+                        if (!acc[studentCategory]) {
+                            acc[studentCategory] = [];
+                        }
+                        acc[studentCategory].push(person);
+                    } else {
+                        // 其他分类直接使用category字段
+                        if (!acc[person.category]) {
+                            acc[person.category] = [];
+                        }
+                        acc[person.category].push(person);
                     }
-                    acc[person.category].push(person);
                     return acc;
                 }, {});
             
@@ -47,9 +82,14 @@ export default {
                 result['Adjunct Faculty'] = this.sortAdjunctFacultyMembers(result['Adjunct Faculty']);
             }
             
-            // 对学生类别中的成员进行排序
-            if (result['Student']) {
-                result['Student'] = this.sortStudentMembers(result['Student']);
+            // 对博士学生类别中的成员进行排序
+            if (result['Doctoral Student']) {
+                result['Doctoral Student'] = this.sortStudentMembers(result['Doctoral Student']);
+            }
+            
+            // 对硕士学生类别中的成员进行排序
+            if (result['Master Student']) {
+                result['Master Student'] = this.sortStudentMembers(result['Master Student']);
             }
             
             return result;
@@ -86,21 +126,8 @@ export default {
             });
         },
         sortStudentMembers(studentMembers) {
-            const rankOrder = {
-                'Doctoral Student': 1,
-                'Master Student': 2
-            };
-            
+            // 现在每个分类内的学生都是同级别的，只需要按姓名排序
             return studentMembers.sort((a, b) => {
-                // 首先按title中的学位排序（博士在前）
-                const rankA = rankOrder[a.title] || 999;
-                const rankB = rankOrder[b.title] || 999;
-                
-                if (rankA !== rankB) {
-                    return rankA - rankB;
-                }
-                
-                // 学位相同时按姓名排序
                 return a.name.localeCompare(b.name);
             });
         },
@@ -174,6 +201,29 @@ export default {
         handleImageError(event) {
             // 如果图片加载失败，替换为默认头像
             event.target.src = '/assets/people/scholar.png';
+        },
+        goToPersonPage(member) {
+            // 保存当前滚动位置
+            this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            // 显示个人详情页面
+            this.selectedMember = member;
+            this.showPersonDetail = true;
+            // 滚动到main内容区域（跳过header）
+            this.$nextTick(() => {
+                const mainElement = document.querySelector('main');
+                if (mainElement) {
+                    mainElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        },
+        backToTeam() {
+            // 返回团队页面
+            this.showPersonDetail = false;
+            this.selectedMember = null;
+            // 恢复滚动位置
+            this.$nextTick(() => {
+                window.scrollTo(0, this.savedScrollPosition);
+            });
         }
     }
 }
@@ -193,92 +243,136 @@ export default {
     </header>
     <main class="flex-1 max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-5xl xl:px-0 min-height-[100vh] pt-20">
         <div>
-            <div class="pt-6 pb-8 space-y-2 md:space-y-5">
-                <h1
-                    class="text-3xl leading-9 font-bold text-gray-800 tracking-tight sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-                    Team
-                </h1>
+            <!-- Person Detail View -->
+            <div v-if="showPersonDetail && selectedMember">
+                <PersonDetail 
+                    :member="selectedMember" 
+                    @back="backToTeam"
+                />
             </div>
             
-            <!-- Tab Navigation -->
-            <div class="flex border-b border-gray-200 mb-8">
-                <button 
-                    @click="switchTab('team')"
-                    :class="[
-                        'px-6 py-3 text-sm font-medium border-b-2 transition-colors',
-                        activeTab === 'team' 
-                            ? 'border-[#6a005f] text-[#6a005f]' 
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    ]"
-                >
-                    Current Team
-                </button>
-                <button 
-                    @click="switchTab('alumni')"
-                    :class="[
-                        'px-6 py-3 text-sm font-medium border-b-2 transition-colors',
-                        activeTab === 'alumni' 
-                            ? 'border-[#6a005f] text-[#6a005f]' 
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    ]"
-                >
-                    Alumni
-                </button>
-            </div>
-            
-            <!-- Team Content -->
-            <div v-if="activeTab === 'team'">
-                <div v-for="category in categories" :key="category" class="category-section my-6">
-                    <div class="pt-6 pb-8 space-y-2 md:space-y-5">
-                        <h1
-                            class="text-xl leading-9 font-bold text-gray-800 tracking-tight text-center md:text-left sm:text-2xl sm:leading-10 md:text-4xl md:leading-14">
-                            {{ category }}
-                        </h1>
-                    </div>
-                    
-                    <!-- Faculty Members with special layout -->
-                    <div v-if="isFacultyCategory(category)" class="space-y-8">
-                        <div v-for="member in membersByCategory[category]" :key="member.name" class="faculty-section">
-                            <div class="flex flex-col md:flex-row items-start gap-6">
-                                <!-- Image Section -->
-                                <div class="w-48 flex-shrink-0">
-                                    <img 
-                                        :src="getMemberImage(member)" 
-                                        :alt="member.name" 
-                                        class="w-48 h-60 object-cover rounded-lg shadow-lg"
-                                        @error="handleImageError"
-                                    />
-                                    <!-- Social Links -->
-                                    <div v-if="member.links" class="flex justify-center gap-2 mt-4">
-                                        <SocialLink v-for="{ link, icon } in member.links" :key="link" :icon="icon" :link="link" />
+            <!-- Team List View -->
+            <div v-else>
+                <div class="pt-6 pb-8 space-y-2 md:space-y-5">
+                    <h1
+                        class="text-3xl leading-9 font-bold text-gray-800 tracking-tight sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+                        Team
+                    </h1>
+                </div>
+                
+                <!-- Tab Navigation -->
+                <div class="flex border-b border-gray-200 mb-8">
+                    <button 
+                        @click="switchTab('faculty')"
+                        :class="[
+                            'px-6 py-3 text-sm font-medium border-b-2 transition-colors',
+                            activeTab === 'faculty' 
+                                ? 'border-[#6a005f] text-[#6a005f]' 
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        ]"
+                    >
+                        Faculty
+                    </button>
+                    <button 
+                        @click="switchTab('students')"
+                        :class="[
+                            'px-6 py-3 text-sm font-medium border-b-2 transition-colors',
+                            activeTab === 'students' 
+                                ? 'border-[#6a005f] text-[#6a005f]' 
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        ]"
+                    >
+                        Students
+                    </button>
+                    <button 
+                        @click="switchTab('alumni')"
+                        :class="[
+                            'px-6 py-3 text-sm font-medium border-b-2 transition-colors',
+                            activeTab === 'alumni' 
+                                ? 'border-[#6a005f] text-[#6a005f]' 
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        ]"
+                    >
+                        Alumni
+                    </button>
+                </div>
+                
+                <!-- Faculty Content -->
+                <div v-if="activeTab === 'faculty'">
+                    <div v-for="category in facultyCategories" :key="category" class="category-section my-6">
+                        <div class="pt-6 pb-8 space-y-2 md:space-y-5">
+                            <h1
+                                class="text-xl leading-9 font-bold text-gray-800 tracking-tight text-center md:text-left sm:text-2xl sm:leading-10 md:text-4xl md:leading-14">
+                                {{ category }}
+                            </h1>
+                        </div>
+                        
+                        <!-- Faculty Members with special layout -->
+                        <div v-if="isFacultyCategory(category)" class="space-y-8">
+                            <div v-for="member in membersByCategory[category]" :key="member.name" class="faculty-section">
+                                <div 
+                                    class="flex flex-col md:flex-row items-start gap-6 cursor-pointer hover:bg-gray-50 p-4 rounded-lg transition-colors"
+                                    @click="goToPersonPage(member)"
+                                >
+                                    <!-- Image Section -->
+                                    <div class="w-48 flex-shrink-0">
+                                        <img 
+                                            :src="getMemberImage(member)" 
+                                            :alt="member.name" 
+                                            class="w-48 h-60 object-cover rounded-lg shadow-lg"
+                                            @error="handleImageError"
+                                        />
+                                        <!-- Social Links -->
+                                        <div v-if="member.links" class="flex justify-center gap-2 mt-4">
+                                            <SocialLink v-for="{ link, icon } in member.links" :key="link" :icon="icon" :link="link" />
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- Text Section -->
-                                <div class="flex-1 space-y-4">
-                                    <h2 class="text-2xl font-bold text-gray-800">{{ member.name }}</h2>
-                                    <p v-if="member.briefIntro" class="text-gray-600 text-lg leading-relaxed">
-                                        {{ member.briefIntro }}
-                                    </p>
-                                    <div class="text-gray-700 leading-relaxed">
-                                        <div v-html="member.desc"></div>
+                                    <!-- Text Section -->
+                                    <div class="flex-1 space-y-4">
+                                        <h2 class="text-2xl font-bold text-gray-800">{{ member.name }}</h2>
+                                        <p v-if="member.briefIntro" class="text-gray-600 text-lg leading-relaxed">
+                                            {{ member.briefIntro }}
+                                        </p>
+                                        <div class="text-gray-700 leading-relaxed">
+                                            <div v-html="member.desc"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Other faculty categories with TeamMembers component -->
+                        <TeamMembers 
+                            v-else-if="membersByCategory[category] && membersByCategory[category].length"
+                            :members="membersByCategory[category]"
+                            @member-click="goToPersonPage"
+                        />
                     </div>
-                    
-                    <!-- Other categories with TeamMembers component -->
-                    <TeamMembers 
-                        v-else
-                        :members="membersByCategory[category]"
-                        v-if="membersByCategory[category] && membersByCategory[category].length"
-                    />
                 </div>
-            </div>
-            
-            <!-- Alumni Content -->
-            <div v-if="activeTab === 'alumni'">
-                <Alumni />
+                
+                <!-- Students Content -->
+                <div v-if="activeTab === 'students'">
+                    <div v-for="category in studentCategories" :key="category" class="category-section my-6">
+                        <div class="pt-6 pb-8 space-y-2 md:space-y-5">
+                            <h1
+                                class="text-xl leading-9 font-bold text-gray-800 tracking-tight text-center md:text-left sm:text-2xl sm:leading-10 md:text-4xl md:leading-14">
+                                {{ category }}
+                            </h1>
+                        </div>
+                        
+                        <!-- Students with TeamMembers component -->
+                        <TeamMembers 
+                            v-if="membersByCategory[category] && membersByCategory[category].length"
+                            :members="membersByCategory[category]"
+                            @member-click="goToPersonPage"
+                        />
+                    </div>
+                </div>
+                
+                <!-- Alumni Content -->
+                <div v-if="activeTab === 'alumni'">
+                    <Alumni />
+                </div>
             </div>
         </div>
     </main>

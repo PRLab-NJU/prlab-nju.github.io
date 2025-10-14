@@ -24,7 +24,7 @@ export default {
     <div :class="classes">
         <div class="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-4 gap-4">
             <div v-for="member in members" :key="member.name" class="item">
-                <TeamMembersItem :member="member" />
+                <TeamMembersItem :member="member" @member-click="$emit('member-click', $event)" />
             </div>
         </div>
     </div>
