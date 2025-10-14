@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Chenyi Zhang"
-image: "/assets/people/zhangchenyi.png"
+image: "/assets/people/zhangchenyi.jpg"
 title: "Doctoral Student"
 category: "Student"
 links:
