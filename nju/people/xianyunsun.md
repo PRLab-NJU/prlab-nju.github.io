@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Xianyun Sun"
-image: "/assets/people/sunxianyun.png"
+image: "/assets/people/sunxianyun.jpg"
 title: "Doctoral Student"
 category: "Student"
 links:
