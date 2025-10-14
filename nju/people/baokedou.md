@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Baoke Dou"
-image: "/assets/people/baokedou.png" 
+image: "/assets/people/doubaoke.jpg" 
 title: "Master Student"
 category: "Student"
 links:
