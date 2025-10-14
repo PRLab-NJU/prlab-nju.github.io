@@ -116,7 +116,7 @@ onUnmounted(() => {
                         <div class="text-sm text-blue-600 font-medium uppercase tracking-wide">Audio Processing</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        Advanced speech recognition, synthesis, and processing technologies. We develop cutting-edge algorithms for natural language understanding, voice conversion, and multilingual speech systems that enable seamless human-computer interaction.
+                        Advanced technologies for understanding and generating speech, audio, and music. We develop foundational models (e.g., Large Audio Language Models) and applications across perception: speech and speaker recognition, audio event detection—and generation: speech synthesis, voice conversion, and music/song creation. Our goal: seamless human–computer voice interfaces.
                     </p>
                 </div>
 
