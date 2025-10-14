@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Yan Kong"
-image: "/assets/people/yankong.jpg" 
+image: "/assets/people/kongyan.jpg" 
 title: "Doctoral Student"
 category: "Student"
 links:
