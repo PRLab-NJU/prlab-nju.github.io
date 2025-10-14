@@ -1,7 +1,7 @@
 ---
 name: "Chenyang Si"
 update-date: "2025/10/07"
-target-student: "Research Assistant"
+target-student: "Research Assistants & Interns"
 recruitmentLink: ""
 ---
 
