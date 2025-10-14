@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Zige Chen"
-image: "/assets/people/zigechen.png"
+image: "/assets/people/chenzige.jpg"
 title: "Master Student"
 category: "Student"
 links:
