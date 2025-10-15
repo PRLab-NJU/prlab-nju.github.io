@@ -1,7 +1,7 @@
 ---
 layout: person
 name: "Caifeng Shan"
-image: "/assets/people/caifengshan.png"
+image: "/assets/people/caifengshan.jpg"
 title: "Professor"
 category: "Fulltime Faculty"
 biography: |
