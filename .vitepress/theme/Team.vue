@@ -103,9 +103,9 @@ export default {
                 'Shuai Wang',
                 'Yanbo Fan',
                 'Yuqi Fang',
+                'Chenyang Si',
                 'Yueming Lv',
-                'Chaoyou Fu',
-                'Chenyang Si'
+                'Chaoyou Fu'
             ];
             
             return facultyMembers.sort((a, b) => {
