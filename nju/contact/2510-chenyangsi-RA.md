@@ -1,7 +1,11 @@
 ---
-name: "Chenyang Si"
+name:
+    en: "Chenyang Si"
+    zh: "司晨阳"
 update-date: "2025/10/07"
-target-student: "Research Assistants & Interns"
+target-student:
+    en: "Research Assistants & Interns"
+    zh: "科研实习生/科研助理"
 recruitmentLink: ""
 ---
 

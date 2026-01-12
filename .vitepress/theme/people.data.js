@@ -1,8 +1,9 @@
 import { createContentLoader } from "vitepress";
 
-export default createContentLoader("/nju/people/*.md", {
+export default createContentLoader("/nju/people/**/*.md", {
   transform: (raw) => {
     return raw
+      .filter(({ url }) => !url.endsWith('/index.html') && !url.endsWith('index.html'))
       .map(({ url, frontmatter, subtext }) => ({
         name: frontmatter.name,
         image: frontmatter.image,

@@ -1,3 +1,9 @@
+<script setup>
+import { useI18n } from '../i18n/index.js'
+
+const t = useI18n('Footer')
+</script>
+
 <template>
     <footer class="footer">
         <div class="footer-content">
@@ -8,19 +14,19 @@
                         <h3 class="lab-subtitle">@NJU</h3>
                     </div>
                     <div class="address">
-                        <p>1520 Taihu Avenue</p>
-                        <p>Huqiu District, Suzhou</p>
-                        <p>Jiangsu Province, China</p>
+                        <p>{{ t.addressLine1 }}</p>
+                        <p>{{ t.addressLine2 }}</p>
+                        <p>{{ t.addressLine3 }}</p>
                     </div>
                 </div>
             </div>
             
             <div class="footer-right">
                 <div class="nav-links">
-                    <a href="/nju/research/" class="nav-link">Our Research</a>
-                    <a href="/nju/people/" class="nav-link">Team</a>
-                    <a href="/nju/papers/" class="nav-link">Publications</a>
-                    <a href="/nju/contact/" class="nav-link">Contact</a>
+                    <a href="/nju/research/" class="nav-link">{{ t.navResearch }}</a>
+                    <a href="/nju/people/" class="nav-link">{{ t.navTeam }}</a>
+                    <a href="/nju/papers/" class="nav-link">{{ t.navPublications }}</a>
+                    <a href="/nju/contact/" class="nav-link">{{ t.navContact }}</a>
                 </div>
             </div>
         </div>

@@ -26,6 +26,10 @@ export default {
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useI18n } from './i18n/index.js'
+import { locale } from './locale.js'
+
+const t = useI18n('Research')
 
 const researchGrid = ref(null)
 const speechCard = ref(null)
@@ -84,7 +88,7 @@ onUnmounted(() => {
         <div class="bg-container absolute inset-0">
             <div class="content-wrapper">
                 <div class="text-content">
-                    <h1 class="main-title">Research</h1>
+                    <h1 class="main-title" :class="{ 'chinese-font': locale.currentLang === 'zh' }">{{ t.mainTitle }}</h1>
                 </div>
                 <ScrollDownArrow target-selector="main" />
             </div>
@@ -97,14 +101,14 @@ onUnmounted(() => {
             <div class="pt-6 pb-8 space-y-2 md:space-y-5">
                 <h1
                     class="text-3xl leading-9 font-bold text-gray-800 tracking-tight sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-                    Our Research
+                    {{ t.ourResearch }}
                 </h1>
             </div>
             <div class="w-full border-t border-gray-200"></div>
             
             <div class="pt-8 pb-8">
                 <p class="text-lg text-gray-600 leading-relaxed">
-                    Our laboratory focuses on six key research areas that drive innovation in artificial intelligence and computer science. We are committed to advancing the frontiers of AI through cutting-edge research and practical applications.
+                    {{ t.introText }}
                 </p>
             </div>
             
@@ -112,66 +116,66 @@ onUnmounted(() => {
                 <!-- Speech Research -->
                 <div class="group speech-bg rounded-lg border border-gray-200 p-8 hover:border-blue-300 hover:shadow-md transition-all duration-300 research-card" ref="speechCard">
                     <div class="border-l-4 border-blue-500 pl-6 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Speech Technology</h3>
-                        <div class="text-sm text-blue-600 font-medium uppercase tracking-wide">Audio Processing</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ t.speechTitle }}</h3>
+                        <div class="text-sm text-blue-600 font-medium uppercase tracking-wide">{{ t.speechSubtitle }}</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        Advanced technologies for understanding and generating speech, audio, and music. We develop foundational models (e.g., Large Audio Language Models) and applications across perception and generation, and aim to create seamless human-computer voice interfaces.
+                        {{ t.speechDescription }}
                     </p>
                 </div>
 
                 <!-- Multimodal Research -->
                 <div class="group multimodal-bg rounded-lg border border-gray-200 p-8 hover:border-purple-300 hover:shadow-md transition-all duration-300 research-card" ref="multimodalCard">
                     <div class="border-l-4 border-purple-500 pl-6 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Data Intelligence</h3>
-                        <div class="text-sm text-purple-600 font-medium uppercase tracking-wide">Visual Analytics</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ t.dataTitle }}</h3>
+                        <div class="text-sm text-purple-600 font-medium uppercase tracking-wide">{{ t.dataSubtitle }}</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        Empowering human-data experience through intelligent visual analytics. Our research integrates AI, visualization, and interaction design to enhance understanding, trust, and decision-making in large-scale data environments.
+                        {{ t.dataDescription }}
                     </p>
                 </div>
 
                 <!-- Embodied AI Research -->
                 <div class="group embodied-bg rounded-lg border border-gray-200 p-8 hover:border-cyan-300 hover:shadow-md transition-all duration-300 research-card" ref="embodiedCard">
                     <div class="border-l-4 border-cyan-400 pl-6 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Embodied Intelligence</h3>
-                        <div class="text-sm text-cyan-500 font-medium uppercase tracking-wide">Robotics & Interaction</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ t.embodiedTitle }}</h3>
+                        <div class="text-sm text-cyan-500 font-medium uppercase tracking-wide">{{ t.embodiedSubtitle }}</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        AI systems that interact with the physical world through robotics and embodied agents. We focus on spatial reasoning, manipulation, navigation, and human-robot collaboration in real-world environments.
+                        {{ t.embodiedDescription }}
                     </p>
                 </div>
 
                 <!-- Generative AI Research -->
                 <div class="group generative-bg rounded-lg border border-gray-200 p-8 hover:border-red-300 hover:shadow-md transition-all duration-300 research-card" ref="generativeCard">
                     <div class="border-l-4 border-red-500 pl-6 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Generative AI</h3>
-                        <div class="text-sm text-red-600 font-medium uppercase tracking-wide">CONTENT UNDERSTANDING & CREATION</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ t.generativeTitle }}</h3>
+                        <div class="text-sm text-red-600 font-medium uppercase tracking-wide">{{ t.generativeSubtitle }}</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        Empowering AI to perceive and simulate the world, advancing toward more general world models. Our research spans multimodal understanding, image and video generation, and interaction with the physical world, pushing the boundaries of AGI.
+                        {{ t.generativeDescription }}
                     </p>
                 </div>
 
                 <!-- AI Safety Research -->
                 <div class="group safety-bg rounded-lg border border-gray-200 p-8 hover:border-green-300 hover:shadow-md transition-all duration-300 research-card" ref="safetyCard">
                     <div class="border-l-4 border-green-500 pl-6 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">AI Safety</h3>
-                        <div class="text-sm text-green-600 font-medium uppercase tracking-wide">Trustworthy AI</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ t.safetyTitle }}</h3>
+                        <div class="text-sm text-green-600 font-medium uppercase tracking-wide">{{ t.safetySubtitle }}</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        Ensuring the safety, reliability, and ethical deployment of AI systems. We research adversarial robustness, AI alignment, interpretability, and responsible AI development to build trustworthy intelligent systems.
+                        {{ t.safetyDescription }}
                     </p>
                 </div>
 
                 <!-- Medical AI Research -->
                 <div class="group medical-bg rounded-lg border border-gray-200 p-8 hover:border-teal-300 hover:shadow-md transition-all duration-300 research-card" ref="medicalCard">
                     <div class="border-l-4 border-teal-500 pl-6 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Medical AI</h3>
-                        <div class="text-sm text-teal-600 font-medium uppercase tracking-wide">Healthcare Innovation</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ t.medicalTitle }}</h3>
+                        <div class="text-sm text-teal-600 font-medium uppercase tracking-wide">{{ t.medicalSubtitle }}</div>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        Al applications in healthcare and medical diagnosis. Our research spans medical data analysis, personalized medicine, brain–computer interface, and clinical decision support systems that improve patient outcomes and healthcare delivery.
+                        {{ t.medicalDescription }}
                     </p>
                 </div>
             </div>
@@ -238,11 +242,22 @@ onUnmounted(() => {
     line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+    transition: font-family 0.3s ease;
+}
+
+.main-title.chinese-font {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'STHeiti', 'SimHei', 'WenQuanYi Micro Hei', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 3.5rem;
 }
 
 @media (min-width: 640px) {
     .main-title {
         font-size: 4rem;
+    }
+    .main-title.chinese-font {
+        font-size: 4.5rem;
     }
 }
 
@@ -250,11 +265,17 @@ onUnmounted(() => {
     .main-title {
         font-size: 5rem;
     }
+    .main-title.chinese-font {
+        font-size: 5.5rem;
+    }
 }
 
 @media (min-width: 1024px) {
     .main-title {
         font-size: 6rem;
+    }
+    .main-title.chinese-font {
+        font-size: 6.5rem;
     }
 }
 

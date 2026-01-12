@@ -4,7 +4,17 @@ import { useData } from 'vitepress'
 import Nav from './components/Nav.vue'
 import Footer from './components/Footer.vue'
 import ScrollDownArrow from './components/ScrollDownArrow.vue'
+import { useI18n } from './i18n/index.js'
+import { locale } from './locale.js'
+
 export default {
+    setup() {
+        const t = useI18n('Papers')
+        return {
+            t,
+            locale
+        }
+    },
     components: {
         Nav,
         Footer,
@@ -33,6 +43,20 @@ export default {
         },
         availableTopics() {
             return ['Speech Technology', 'Data Intelligence', 'Embodied Intelligence', 'Generative AI', 'AI Safety', 'Medical AI','Multimodal AI'];
+        },
+        getTopicName() {
+            return (topic) => {
+                const topicMap = {
+                    'Speech Technology': this.t.topicSpeechTechnology,
+                    'Data Intelligence': this.t.topicDataIntelligence,
+                    'Embodied Intelligence': this.t.topicEmbodiedIntelligence,
+                    'Generative AI': this.t.topicGenerativeAI,
+                    'AI Safety': this.t.topicAISafety,
+                    'Medical AI': this.t.topicMedicalAI,
+                    'Multimodal AI': this.t.topicMultimodalAI
+                };
+                return topicMap[topic] || topic;
+            }
         }
     },
     methods: {
@@ -103,7 +127,7 @@ export default {
         <div class="bg-container absolute inset-0">
             <div class="content-wrapper">
                 <div class="text-content">
-                    <h1 class="main-title">Papers</h1>
+                    <h1 class="main-title" :class="{ 'chinese-font': locale.currentLang === 'zh' }">{{ t.mainTitle }}</h1>
                 </div>
                 <ScrollDownArrow target-selector="main" />
             </div>
@@ -113,11 +137,11 @@ export default {
     <main class="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-height-[100vh] pt-20 pb-16">
         <!-- Filter Section -->
         <div class="mb-8 p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Filter Papers</h2>
+            <h2 class="text-xl font-bold text-gray-800 mb-4">{{ t.filterTitle }}</h2>
             
             <!-- Year Filter -->
             <div class="mb-4">
-                <h3 class="text-sm font-medium text-gray-700 mb-2">Year</h3>
+                <h3 class="text-sm font-medium text-gray-700 mb-2">{{ t.filterYear }}</h3>
                 <div class="flex flex-wrap gap-2">
                     <button 
                         @click="selectYear('all')"
@@ -128,7 +152,7 @@ export default {
                                 : 'text-gray-600 border-gray-300 hover:border-gray-500'
                         ]"
                     >
-                        All
+                        {{ t.filterAll }}
                     </button>
                     <button 
                         v-for="year in availableYears" 
@@ -148,7 +172,7 @@ export default {
             
             <!-- Topic Filter -->
             <div>
-                <h3 class="text-sm font-medium text-gray-700 mb-2">Topic</h3>
+                <h3 class="text-sm font-medium text-gray-700 mb-2">{{ t.filterTopic }}</h3>
                 <div class="flex flex-wrap gap-2">
                     <button 
                         @click="selectTopic('all')"
@@ -159,7 +183,7 @@ export default {
                                 : 'text-gray-600 border-gray-300 hover:border-gray-500'
                         ]"
                     >
-                        All
+                        {{ t.filterAll }}
                     </button>
                     <button 
                         v-for="topic in availableTopics" 
@@ -172,7 +196,7 @@ export default {
                                 : getKeywordClass(topic) + ' hover:bg-opacity-10'
                         ]"
                     >
-                        {{ topic }}
+                        {{ getTopicName(topic) }}
                     </button>
                 </div>
             </div>
@@ -217,7 +241,7 @@ export default {
                                     :class="getKeywordClass(keyword)"
                                     class="px-3 py-1 rounded-full text-sm font-medium border-2"
                                 >
-                                    {{ keyword }}
+                                    {{ getTopicName(keyword) }}
                                 </span>
                             </div>
                         </div>
@@ -272,7 +296,7 @@ export default {
                                     :class="getKeywordClass(keyword)"
                                     class="px-3 py-1 rounded-full text-sm font-medium border-2"
                                 >
-                                    {{ keyword }}
+                                    {{ getTopicName(keyword) }}
                                 </span>
                             </div>
                         </div>
@@ -352,11 +376,22 @@ export default {
     line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+    transition: font-family 0.3s ease;
+}
+
+.main-title.chinese-font {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'STHeiti', 'SimHei', 'WenQuanYi Micro Hei', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 3.5rem;
 }
 
 @media (min-width: 640px) {
     .main-title {
         font-size: 4rem;
+    }
+    .main-title.chinese-font {
+        font-size: 4.5rem;
     }
 }
 
@@ -364,11 +399,17 @@ export default {
     .main-title {
         font-size: 5rem;
     }
+    .main-title.chinese-font {
+        font-size: 5.5rem;
+    }
 }
 
 @media (min-width: 1024px) {
     .main-title {
         font-size: 6rem;
+    }
+    .main-title.chinese-font {
+        font-size: 6.5rem;
     }
 }
 </style>

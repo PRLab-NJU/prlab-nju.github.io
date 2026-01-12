@@ -1,7 +1,11 @@
 <script setup>
+import { useI18n } from './i18n/index.js'
+import { locale } from './locale.js'
 import Nav from './components/Nav.vue'
 import Footer from './components/Footer.vue'
 import ScrollDownArrow from './components/ScrollDownArrow.vue'
+
+const t = useI18n('NJU')
 </script>
 
 <template>
@@ -9,13 +13,11 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
         <div class="bg-container absolute inset-0">
             <div class="content-wrapper">
                 <div class="text-content">
-                    <h1 class="main-title">
-                        <span class="title-text">PRLab</span>
-                        <span class="title-at">@</span>
-                        <span class="title-text">NJU</span>
+                    <h1 class="main-title" :class="{ 'chinese-font': locale.currentLang === 'zh' }">
+                        {{ t.title }}
                     </h1>
-                    <h2 class="subtitle">Pattern Recognition Laboratory @</h2>
-                    <h2 class="subtitle">Nanjing University</h2>
+                    <h2 class="subtitle">{{ t.subtitle1 }}</h2>
+                    <h2 class="subtitle">{{ t.subtitle2 }}</h2>
                 </div>
                 <ScrollDownArrow target-selector=".main-section" />
             </div>
@@ -26,11 +28,9 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
         <div class="main-container">
             <div class="text-section">
                 <div class="text-content-main">
-                    <h3 class="section-title">ABOUT</h3>
-                    <h1 class="lab-title">PRLab@NJU</h1>
-                    <p class="description">
-                        The Pattern Recognition Laboratory (PRLab@NJU) was established in 2023, originating from the research team led by <a href="https://www.nju.edu.cn/en/info/2292/4261.htm" target="_blank" class="highlight-link">Prof. Tieniu Tan</a> at Nanjing University. The laboratory focuses on advancing the fundamental research of artificial intelligence, with pattern recognition—the core of both human and machine intelligence—as its primary research area. Adhering to the development goal of being world-class, it is striving to build a nationally strategic scientific and technological force with global influence in the fields of pattern recognition and artificial intelligence. Its sister lab is <a href="http://www.cripac.ia.ac.cn/CN/model/index.htm" target="_blank" class="highlight-link">PRLab@CASIA (NLPR)</a> at the Institute of Automation, Chinese Academy of Sciences.
-                    </p>
+                    <h3 class="section-title" :class="{ 'chinese-font': locale.currentLang === 'zh' }">{{ t.aboutTitle }}</h3>
+                    <h1 class="lab-title">{{ t.labTitle }}</h1>
+                    <p class="description" v-html="t.description"></p>
                 </div>
             </div>
             <div class="image-section">
@@ -41,35 +41,35 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
         </div>
         <div class="cards-section">
             <div class="explore-header">
-                <h2 class="section-title">EXPLORE</h2>
-                <h1 class="lab-title">PRLab@NJU</h1>
+                <h2 class="section-title" :class="{ 'chinese-font': locale.currentLang === 'zh' }">{{ t.exploreTitle }}</h2>
+                <h1 class="lab-title">{{ t.labTitle }}</h1>
             </div>
             <div class="cards-container">
                 <div class="card research-card">
                     <a href="/nju/research/" class="card-link">
                         <div class="card-content">
-                            <h3 class="card-title">Our Research</h3>
+                            <h3 class="card-title">{{ t.cardResearch }}</h3>
                         </div>
                     </a>
                 </div>
                 <div class="card team-card">
                     <a href="/nju/people/" class="card-link">
                         <div class="card-content">
-                            <h3 class="card-title">Team</h3>
+                            <h3 class="card-title">{{ t.cardTeam }}</h3>
                         </div>
                     </a>
                 </div>
                 <div class="card publications-card">
                     <a href="/nju/papers/" class="card-link">
                         <div class="card-content">
-                            <h3 class="card-title">Publications</h3>
+                            <h3 class="card-title">{{ t.cardPublications }}</h3>
                         </div>
                     </a>
                 </div>
                 <div class="card contact-card">
                     <a href="/nju/contact/" class="card-link">
                         <div class="card-content">
-                            <h3 class="card-title">Contact</h3>
+                            <h3 class="card-title">{{ t.cardContact }}</h3>
                         </div>
                     </a>
                 </div>
@@ -137,11 +137,22 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
     line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+    transition: font-family 0.3s ease;
+}
+
+.main-title.chinese-font {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'STHeiti', 'SimHei', 'WenQuanYi Micro Hei', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 3.5rem;
 }
 
 @media (min-width: 640px) {
     .main-title {
         font-size: 4rem;
+    }
+    .main-title.chinese-font {
+        font-size: 4.5rem;
     }
 }
 
@@ -149,11 +160,17 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
     .main-title {
         font-size: 5rem;
     }
+    .main-title.chinese-font {
+        font-size: 5.5rem;
+    }
 }
 
 @media (min-width: 1024px) {
     .main-title {
         font-size: 6rem;
+    }
+    .main-title.chinese-font {
+        font-size: 6.5rem;
     }
 }
 
@@ -241,6 +258,14 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
     font-weight: 600;
     color: rgb(106, 0, 95);
     text-transform: uppercase;
+    transition: font-family 0.3s ease, font-size 0.3s ease, font-weight 0.3s ease;
+}
+
+.section-title.chinese-font {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'STHeiti', 'SimHei', 'WenQuanYi Micro Hei', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    font-size: 3.5rem;
 }
 
 .lab-title {
@@ -269,7 +294,7 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
     color: black;
 }
 
-.highlight-link {
+:deep(.highlight-link) {
     color: rgb(106, 0, 95);
     font-weight: 700;
     text-decoration: none;
@@ -277,7 +302,7 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
     transition: all 0.3s ease;
 }
 
-.highlight-link::after {
+:deep(.highlight-link)::after {
     content: '';
     position: absolute;
     width: 0;
@@ -288,7 +313,11 @@ import ScrollDownArrow from './components/ScrollDownArrow.vue'
     transition: width 0.3s ease;
 }
 
-.highlight-link:hover::after {
+:deep(.highlight-link:hover) {
+    color: rgb(106, 0, 95);
+}
+
+:deep(.highlight-link:hover)::after {
     width: 100%;
 }
 

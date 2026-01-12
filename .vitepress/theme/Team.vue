@@ -7,8 +7,17 @@ import Alumni from './Alumni.vue';
 import Nav from './components/Nav.vue'
 import Footer from './components/Footer.vue'
 import ScrollDownArrow from './components/ScrollDownArrow.vue'
+import { useI18n } from './i18n/index.js'
+import { locale } from './locale.js'
 
 export default {
+    setup() {
+        const t = useI18n('Team')
+        return {
+            t,
+            locale
+        }
+    },
     components: {
         TeamMembers,
         SocialLink,
@@ -19,10 +28,8 @@ export default {
         ScrollDownArrow
     },
     data() {
-        const categorizedData = this.categorizeMembers(people);
         return {
-            categories: this.getOrderedCategories(categorizedData),
-            membersByCategory: categorizedData,
+            rawPeople: people,
             activeTab: 'faculty',
             selectedMember: null,
             showPersonDetail: false,
@@ -30,6 +37,43 @@ export default {
         };
     },
     computed: {
+        localizedPeople() {
+            const lang = this.locale.currentLang;
+            return this.rawPeople.map(person => {
+                const localized = { ...person };
+                const bilingualFields = ['name', 'title', 'desc', 'briefIntro', 'biography', 'address', 'office'];
+                bilingualFields.forEach(field => {
+                    if (localized[field] && typeof localized[field] === 'object' && !Array.isArray(localized[field])) {
+                        if (localized[field].en !== undefined || localized[field].zh !== undefined) {
+                            // 保存英文名字用于排序
+                            if (field === 'name' && localized[field].en) {
+                                localized.nameEn = localized[field].en;
+                            }
+                            // 保存英文标题用于分类
+                            if (field === 'title' && localized[field].en) {
+                                localized.titleEn = localized[field].en;
+                            }
+                            localized[field] = localized[field][lang] || localized[field].en || localized[field].zh || '';
+                        }
+                    }
+                });
+                // 如果 name 字段已经是字符串（没有双语结构），也设置 nameEn 用于排序
+                if (!localized.nameEn && typeof localized.name === 'string') {
+                    localized.nameEn = localized.name;
+                }
+                // 如果 title 字段已经是字符串（没有双语结构），也设置 titleEn 用于分类
+                if (!localized.titleEn && typeof localized.title === 'string') {
+                    localized.titleEn = localized.title;
+                }
+                return localized;
+            });
+        },
+        membersByCategory() {
+            return this.categorizeMembers(this.localizedPeople);
+        },
+        categories() {
+            return this.getOrderedCategories(this.membersByCategory);
+        },
         facultyCategories() {
             const facultyCategoryOrder = [
                 'Principal Investigator',
@@ -48,6 +92,20 @@ export default {
             ];
             
             return studentCategoryOrder.filter(category => this.membersByCategory[category]);
+        },
+        getCategoryName() {
+            return (category) => {
+                const categoryMap = {
+                    'Principal Investigator': this.t.categoryPrincipalInvestigator,
+                    'Fulltime Faculty': this.t.categoryFulltimeFaculty,
+                    'Adjunct Faculty': this.t.categoryAdjunctFaculty,
+                    'Doctoral Student': this.t.categoryDoctoralStudent,
+                    'Master Student': this.t.categoryMasterStudent,
+                    'Research Assistant': this.t.categoryResearchAssistant,
+                    'Management Team': this.t.categoryManagementTeam
+                };
+                return categoryMap[category] || category;
+            }
         }
     },
     methods: {
@@ -55,15 +113,18 @@ export default {
             const result = people
                 .filter(person => person.url.endsWith('.html'))
                 .reduce((acc, person) => {
-                    // 对于Student分类，按照title字段进一步细分
                     if (person.category === 'Student') {
-                        const studentCategory = person.title === 'Doctoral Student' ? 'Doctoral Student' : 'Master Student';
+                        const titleEn = person.titleEn || person.title;
+                        const titleCurrent = person.title;
+                        const isDoctoral = titleEn === 'Doctoral Student' || 
+                                         titleCurrent === 'Doctoral Student' ||
+                                         titleCurrent === '博士研究生';
+                        const studentCategory = isDoctoral ? 'Doctoral Student' : 'Master Student';
                         if (!acc[studentCategory]) {
                             acc[studentCategory] = [];
                         }
                         acc[studentCategory].push(person);
                     } else {
-                        // 其他分类直接使用category字段
                         if (!acc[person.category]) {
                             acc[person.category] = [];
                         }
@@ -72,22 +133,18 @@ export default {
                     return acc;
                 }, {});
             
-            // 对Fulltime Faculty类别中的成员进行排序
             if (result['Fulltime Faculty']) {
                 result['Fulltime Faculty'] = this.sortFacultyMembers(result['Fulltime Faculty']);
             }
             
-            // 对Adjunct Faculty类别中的成员进行排序
             if (result['Adjunct Faculty']) {
                 result['Adjunct Faculty'] = this.sortAdjunctFacultyMembers(result['Adjunct Faculty']);
             }
             
-            // 对博士学生类别中的成员进行排序
             if (result['Doctoral Student']) {
                 result['Doctoral Student'] = this.sortStudentMembers(result['Doctoral Student']);
             }
             
-            // 对硕士学生类别中的成员进行排序
             if (result['Master Student']) {
                 result['Master Student'] = this.sortStudentMembers(result['Master Student']);
             }
@@ -95,7 +152,6 @@ export default {
             return result;
         },
         sortFacultyMembers(facultyMembers) {
-            // 定义Fulltime Faculty的固定排序顺序
             const customOrder = [
                 'Caifeng Shan',
                 'Fang Zhao',
@@ -109,30 +165,30 @@ export default {
             ];
             
             return facultyMembers.sort((a, b) => {
-                const indexA = customOrder.indexOf(a.name);
-                const indexB = customOrder.indexOf(b.name);
+                const nameA = a.nameEn || a.name;
+                const nameB = b.nameEn || b.name;
                 
-                // 如果两个名字都在自定义顺序中，按自定义顺序排序
+                const indexA = customOrder.indexOf(nameA);
+                const indexB = customOrder.indexOf(nameB);
+                
                 if (indexA !== -1 && indexB !== -1) {
                     return indexA - indexB;
                 }
                 
-                // 如果只有一个名字在自定义顺序中，优先显示
                 if (indexA !== -1) return -1;
                 if (indexB !== -1) return 1;
                 
-                // 如果都不在自定义顺序中，按姓名排序
-                return a.name.localeCompare(b.name);
+                return nameA.localeCompare(nameB);
             });
         },
         sortStudentMembers(studentMembers) {
-            // 现在每个分类内的学生都是同级别的，只需要按姓名排序
             return studentMembers.sort((a, b) => {
-                return a.name.localeCompare(b.name);
+                const nameA = a.nameEn || a.name;
+                const nameB = b.nameEn || b.name;
+                return nameA.localeCompare(nameB);
             });
         },
         sortAdjunctFacultyMembers(adjunctFacultyMembers) {
-            // 定义Adjunct Faculty的固定排序顺序
             const customOrder = [
                 'Zhaoxiang Zhang',
                 'Liang Wang', 
@@ -143,20 +199,20 @@ export default {
             ];
             
             return adjunctFacultyMembers.sort((a, b) => {
-                const indexA = customOrder.indexOf(a.name);
-                const indexB = customOrder.indexOf(b.name);
+                const nameA = a.nameEn || a.name;
+                const nameB = b.nameEn || b.name;
                 
-                // 如果两个名字都在自定义顺序中，按自定义顺序排序
+                const indexA = customOrder.indexOf(nameA);
+                const indexB = customOrder.indexOf(nameB);
+                
                 if (indexA !== -1 && indexB !== -1) {
                     return indexA - indexB;
                 }
                 
-                // 如果只有一个名字在自定义顺序中，优先显示
                 if (indexA !== -1) return -1;
                 if (indexB !== -1) return 1;
                 
-                // 如果都不在自定义顺序中，按姓名排序
-                return a.name.localeCompare(b.name);
+                return nameA.localeCompare(nameB);
             });
         },
         getOrderedCategories(categorizedData) {
@@ -199,16 +255,12 @@ export default {
             return member.image || '/assets/people/scholar.png';
         },
         handleImageError(event) {
-            // 如果图片加载失败，替换为默认头像
             event.target.src = '/assets/people/scholar.png';
         },
         goToPersonPage(member) {
-            // 保存当前滚动位置
             this.savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-            // 显示个人详情页面
             this.selectedMember = member;
             this.showPersonDetail = true;
-            // 滚动到main内容区域（跳过header）
             this.$nextTick(() => {
                 const mainElement = document.querySelector('main');
                 if (mainElement) {
@@ -234,7 +286,7 @@ export default {
         <div class="bg-container absolute inset-0">
             <div class="content-wrapper">
                 <div class="text-content">
-                    <h1 class="main-title">Team</h1>
+                    <h1 class="main-title" :class="{ 'chinese-font': locale.currentLang === 'zh' }">{{ t.mainTitle }}</h1>
                 </div>
                 <ScrollDownArrow target-selector="main" />
             </div>
@@ -256,7 +308,7 @@ export default {
                 <div class="pt-6 pb-8 space-y-2 md:space-y-5">
                     <h1
                         class="text-3xl leading-9 font-bold text-gray-800 tracking-tight sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-                        Team
+                        {{ t.pageTitle }}
                     </h1>
                 </div>
                 
@@ -271,7 +323,7 @@ export default {
                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         ]"
                     >
-                        Faculty
+                        {{ t.tabFaculty }}
                     </button>
                     <button 
                         @click="switchTab('students')"
@@ -282,7 +334,7 @@ export default {
                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         ]"
                     >
-                        Students
+                        {{ t.tabStudents }}
                     </button>
                     <button 
                         @click="switchTab('alumni')"
@@ -293,28 +345,25 @@ export default {
                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         ]"
                     >
-                        Alumni
+                        {{ t.tabAlumni }}
                     </button>
                 </div>
                 
-                <!-- Faculty Content -->
                 <div v-if="activeTab === 'faculty'">
                     <div v-for="category in facultyCategories" :key="category" class="category-section my-6">
                         <div class="pt-6 pb-8 space-y-2 md:space-y-5">
                             <h1
                                 class="text-xl leading-9 font-bold text-gray-800 tracking-tight text-center md:text-left sm:text-2xl sm:leading-10 md:text-4xl md:leading-14">
-                                {{ category }}
+                                {{ getCategoryName(category) }}
                             </h1>
                         </div>
                         
-                        <!-- Faculty Members with special layout -->
                         <div v-if="isFacultyCategory(category)" class="space-y-8">
                             <div v-for="member in membersByCategory[category]" :key="member.name" class="faculty-section">
                                 <div 
                                     class="flex flex-col md:flex-row items-start gap-6 cursor-pointer hover:bg-gray-50 p-4 rounded-lg transition-colors"
                                     @click="goToPersonPage(member)"
                                 >
-                                    <!-- Image Section -->
                                     <div class="w-48 flex-shrink-0">
                                         <img 
                                             :src="getMemberImage(member)" 
@@ -356,7 +405,7 @@ export default {
                         <div class="pt-6 pb-8 space-y-2 md:space-y-5">
                             <h1
                                 class="text-xl leading-9 font-bold text-gray-800 tracking-tight text-center md:text-left sm:text-2xl sm:leading-10 md:text-4xl md:leading-14">
-                                {{ category }}
+                                {{ getCategoryName(category) }}
                             </h1>
                         </div>
                         
@@ -436,11 +485,22 @@ export default {
     line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+    transition: font-family 0.3s ease;
+}
+
+.main-title.chinese-font {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'STHeiti', 'SimHei', 'WenQuanYi Micro Hei', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 3.5rem;
 }
 
 @media (min-width: 640px) {
     .main-title {
         font-size: 4rem;
+    }
+    .main-title.chinese-font {
+        font-size: 4.5rem;
     }
 }
 
@@ -448,11 +508,17 @@ export default {
     .main-title {
         font-size: 5rem;
     }
+    .main-title.chinese-font {
+        font-size: 5.5rem;
+    }
 }
 
 @media (min-width: 1024px) {
     .main-title {
         font-size: 6rem;
+    }
+    .main-title.chinese-font {
+        font-size: 6.5rem;
     }
 }
 </style>

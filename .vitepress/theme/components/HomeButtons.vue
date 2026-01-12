@@ -1,8 +1,8 @@
 <template>
     <div class="buttons-section">
         <div class="selection-guide">
-            <h3 class="guide-text">Choose a PRLab</h3>
-            <p class="guide-subtitle">Select which Pattern Recognition Laboratory to explore</p>
+            <h3 class="guide-text">{{ t.guideText }}</h3>
+            <p class="guide-subtitle">{{ t.guideSubtitle }}</p>
         </div>
         <div class="buttons-container">
             <div 
@@ -12,7 +12,7 @@
             >
                 <a href="/nju/" class="button njuz-button">
                     <div class="button-bg njuz-bg"></div>
-                    <span class="button-text njuz-text">PRLab<span class="at-symbol">@</span><span class="highlight-nju">NJU</span></span>
+                    <span class="button-text njuz-text">{{ t.njuText }}<span class="at-symbol">{{ t.njuAt }}</span><span class="highlight-nju">{{ t.njuHighlight }}</span></span>
                 </a>
             </div>
             <div 
@@ -22,7 +22,7 @@
             >
                 <a href="http://www.cripac.ia.ac.cn/CN/model/index.htm" class="button casia-button" target="_blank" rel="noopener noreferrer">
                     <div class="button-bg casia-bg"></div>
-                    <span class="button-text casia-text">PRLab<span class="at-symbol">@</span><span class="highlight-casia">CASIA</span></span>
+                    <span class="button-text casia-text">{{ t.casiaText }}<span class="at-symbol">{{ t.casiaAt }}</span><span class="highlight-casia">{{ t.casiaHighlight }}</span></span>
                 </a>
             </div>
             <!-- 动态横线 -->
@@ -35,11 +35,19 @@
 </template>
 
 <script>
+import { useI18n } from '../i18n/index.js'
+
 export default {
     name: 'HomeButtons',
+    setup() {
+        const t = useI18n('HomeButtons')
+        return {
+            t
+        }
+    },
     data() {
         return {
-            activeButton: 'nju' // 默认激活NJU按钮
+            activeButton: 'nju'
         }
     },
     methods: {
@@ -76,6 +84,7 @@ export default {
     text-align: center;
     margin-bottom: 2rem;
     z-index: 12;
+    margin-right: 50px;;
 }
 
 .guide-text {

@@ -3,7 +3,17 @@ import { data as contacts } from './contact.data.js';
 import Nav from './components/Nav.vue'
 import Footer from './components/Footer.vue'
 import ScrollDownArrow from './components/ScrollDownArrow.vue'
+import { useI18n } from './i18n/index.js'
+import { locale } from './locale.js'
+
 export default {
+    setup() {
+        const t = useI18n('Contact')
+        return {
+            t,
+            locale
+        }
+    },
     components: {
         Nav,
         Footer,
@@ -35,6 +45,15 @@ export default {
             if (link) {
                 window.open(link, '_blank');
             }
+        },
+        getLocalizedField(field) {
+            // 如果字段是对象（包含 en/zh），根据当前语言返回对应值
+            if (typeof field === 'object' && field !== null && !Array.isArray(field)) {
+                const lang = locale.currentLang;
+                return field[lang] || field.en || field.zh || field;
+            }
+            // 如果不是对象，直接返回（向后兼容）
+            return field;
         }
     }
 }
@@ -46,7 +65,7 @@ export default {
         <div class="bg-container absolute inset-0">
             <div class="content-wrapper">
                 <div class="text-content">
-                    <h1 class="main-title">Contact</h1>
+                    <h1 class="main-title" :class="{ 'chinese-font': locale.currentLang === 'zh' }">{{ t.mainTitle }}</h1>
                 </div>
                 <ScrollDownArrow target-selector="main" />
             </div>
@@ -57,18 +76,16 @@ export default {
         <!-- Welcome Information -->
         <section class="mb-12">
             <div class="bg-white rounded-lg shadow-lg p-8">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Welcome to Contact Us</h2>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ t.welcomeTitle }}</h2>
                 <p class="text-lg text-gray-600 leading-relaxed">
-                    NJU PRLab always welcomes faculty and students to contact us for academic exchange. 
-                    We are dedicated to research in artificial intelligence and related fields, 
-                    and welcome researchers interested in relevant areas to contact us for academic discussions and collaborative research.
+                    {{ t.welcomeText }}
                 </p>
             </div>
         </section>
 
         <!-- Faculty Enrollment Information -->
         <section class="mb-12">
-            <h2 class="text-3xl font-bold text-gray-800 mb-8">Open Positions</h2>
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">{{ t.openPositions }}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div 
                     v-for="contact in contacts" 
@@ -76,7 +93,7 @@ export default {
                     class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
                     @click="openRecruitmentLink(contact)"
                 >
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ contact.name }}</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ getLocalizedField(contact.name) }}</h3>
                     <div class="space-y-3">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,7 +105,7 @@ export default {
                             <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
-                            <span class="text-gray-600">{{ contact['target-student'] }}</span>
+                            <span class="text-gray-600">{{ getLocalizedField(contact['target-student']) }}</span>
                         </div>
                     </div>
                 </div>
@@ -155,11 +172,22 @@ export default {
     line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+    transition: font-family 0.3s ease;
+}
+
+.main-title.chinese-font {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'STHeiti', 'SimHei', 'WenQuanYi Micro Hei', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 3.5rem;
 }
 
 @media (min-width: 640px) {
     .main-title {
         font-size: 4rem;
+    }
+    .main-title.chinese-font {
+        font-size: 4.5rem;
     }
 }
 
@@ -167,11 +195,17 @@ export default {
     .main-title {
         font-size: 5rem;
     }
+    .main-title.chinese-font {
+        font-size: 5.5rem;
+    }
 }
 
 @media (min-width: 1024px) {
     .main-title {
         font-size: 6rem;
+    }
+    .main-title.chinese-font {
+        font-size: 6.5rem;
     }
 }
 </style>

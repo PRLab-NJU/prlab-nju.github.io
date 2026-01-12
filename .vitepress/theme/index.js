@@ -3,6 +3,7 @@ import PrimeVue from "primevue/config";
 import MultiSelect from "primevue/multiselect";
 import FloatLabel from "primevue/floatlabel";
 import Aura from "@primevue/themes/aura";
+import { locale } from "./locale.js";
 import "./style.css";
 
 export default {
@@ -18,5 +19,7 @@ export default {
     });
     app.component("MultiSelect", MultiSelect);
     app.directive("FloatLabel", FloatLabel);
+    app.provide('locale', locale);
+    app.config.globalProperties.$locale = locale;
   },
 };

@@ -1,14 +1,17 @@
 <script>
 import NavBarMenu from './NavBarMenu.vue';
 import NavBarTitle from './NavBarTitle.vue';
+import { locale } from '../locale.js';
 
 export default {
     components: {
         NavBarMenu,
         NavBarTitle
     },
+    inject: ['locale'],
     data() {
         return {
+            locale: locale,
             isMenuOpen: false,
             scrollY: 0
         };
@@ -81,6 +84,14 @@ export default {
                 <div class="hidden md:flex md:items-center">
                     <NavBarMenu @menu-item-clicked="closeMenu" />
                 </div>
+                <!-- Language Toggle Button -->
+                <button 
+                    class="lang-toggle-btn ml-4 text-white flex items-center justify-center"
+                    @click="locale.toggleLang"
+                    title="切换语言 / Switch Language"
+                >
+                    <i class="bi bi-globe text-xl"></i>
+                </button>
                 
                 <!-- Mobile Menu Overlay -->
                 <div v-if="isMenuOpen" class="fixed inset-0 z-40 md:hidden" @click="closeMenu">
@@ -117,5 +128,23 @@ export default {
     position: relative;
     z-index: 10;
     overflow: visible;
+}
+
+.lang-toggle-btn {
+    text-decoration: none !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.025em !important;
+    transition: all 0.3s ease !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.lang-toggle-btn:hover {
+    transform: translateY(-2px) !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 </style>

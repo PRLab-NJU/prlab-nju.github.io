@@ -1,4 +1,6 @@
 <script>
+import { useI18n } from '../i18n/index.js'
+
 export default {
     props: {
         member: {
@@ -6,9 +8,14 @@ export default {
             required: true
         }
     },
+    setup() {
+        const t = useI18n('PersonDetail')
+        return {
+            t
+        }
+    },
     methods: {
         handleImageError(event) {
-            // 如果图片加载失败，替换为默认头像
             event.target.src = '/assets/people/scholar.png';
         },
         getMemberImage(member) {
@@ -29,7 +36,7 @@ export default {
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                Back to Team
+                {{ t.backToTeam }}
             </button>
         </div>
 
@@ -64,8 +71,8 @@ export default {
                             <div v-if="member.links" class="space-y-2">
                                 <div v-for="{ link, icon } in member.links" :key="link" class="flex items-center">
                                     <span v-if="icon !== 'email'" class="font-medium text-gray-700 w-20">
-                                        <span v-if="icon === 'scholar'">Scholar:</span>
-                                        <span v-else-if="icon === 'website'">Website:</span>
+                                        <span v-if="icon === 'scholar'">{{ t.scholar }}:</span>
+                                        <span v-else-if="icon === 'website'">{{ t.website }}:</span>
                                         <span v-else>{{ icon }}:</span>
                                     </span>
                                     <a 
@@ -84,7 +91,7 @@ export default {
                             <div v-if="member.emails && member.emails.length > 0" class="space-y-2">
                                 <div v-for="(email, index) in member.emails" :key="index" class="flex items-center">
                                     <span class="font-medium text-gray-700 w-20">
-                                        {{ member.emails.length > 1 ? `Email ${index + 1}:` : 'Email:' }}
+                                        {{ member.emails.length > 1 ? `${t.email} ${index + 1}:` : `${t.email}:` }}
                                     </span>
                                     <a 
                                         :href="`mailto:${email}`" 
@@ -98,7 +105,7 @@ export default {
                             <!-- Single Email from links (fallback) -->
                             <div v-else-if="member.links && member.links.some(link => link.icon === 'email')" class="space-y-2">
                                 <div v-for="{ link, icon } in member.links" :key="link" class="flex items-center">
-                                    <span v-if="icon === 'email'" class="font-medium text-gray-700 w-20">Email:</span>
+                                    <span v-if="icon === 'email'" class="font-medium text-gray-700 w-20">{{ t.email }}:</span>
                                     <a 
                                         v-if="icon === 'email'"
                                         :href="`mailto:${link}`" 
@@ -111,19 +118,19 @@ export default {
                             
                             <!-- Phone -->
                             <div v-if="member.phone" class="flex items-center">
-                                <span class="font-medium text-gray-700 w-20">Phone:</span>
+                                <span class="font-medium text-gray-700 w-20">{{ t.phone }}:</span>
                                 <span class="text-gray-600">{{ member.phone }}</span>
                             </div>
                             
                             <!-- Office -->
                             <div v-if="member.office" class="flex items-center">
-                                <span class="font-medium text-gray-700 w-20">Office:</span>
+                                <span class="font-medium text-gray-700 w-20">{{ t.office }}:</span>
                                 <span class="text-gray-600">{{ member.office }}</span>
                             </div>
                             
                             <!-- Address -->
                             <div v-if="member.address" class="flex items-start">
-                                <span class="font-medium text-gray-700 w-20">Address:</span>
+                                <span class="font-medium text-gray-700 w-20">{{ t.address }}:</span>
                                 <span class="text-gray-600 flex-1">{{ member.address }}</span>
                             </div>
                         </div>
@@ -133,17 +140,17 @@ export default {
         </div>
 
                 <!-- Biography Section -->
-                <div v-if="member.biography" class="bg-white rounded-lg shadow-lg p-8">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                        <svg class="w-6 h-6 mr-2 text-[#6a005f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Biography
-                    </h3>
-                    <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                        <div v-html="member.biography"></div>
-                    </div>
-                </div>
+        <div v-if="member.biography" class="bg-white rounded-lg shadow-lg p-8 mb-10">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-[#6a005f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {{ t.biography }}
+            </h3>
+            <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                <div v-html="member.biography"></div>
+            </div>
+        </div>
     </div>
 </template>
 

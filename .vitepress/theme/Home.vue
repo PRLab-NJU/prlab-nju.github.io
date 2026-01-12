@@ -4,8 +4,8 @@
             <HomeNav class="relative z-10"></HomeNav>
             <div class="content-wrapper">
                 <div class="text-content">
-                    <h1 class="main-title">PRLab</h1>
-                    <h2 class="subtitle">Pattern Recognition Laboratory</h2>
+                    <h1 class="main-title" :class="{ 'chinese-font': locale.currentLang === 'zh' }">{{ t.mainTitle }}</h1>
+                    <h2 class="subtitle">{{ t.subtitle }}</h2>
                 </div>
                 
                 <!-- 向下滚动箭头 -->
@@ -17,24 +17,18 @@
         <div class="description-section">
             <div class="description-container">
                 <div class="description-left">
-                    <div class="description-title">About the Lab</div>
-                    <p class="description-text">
-                        The <strong class="highlight-lab">Pattern Recognition Laboratory (PRLab)</strong>, under the leadership of <strong class="highlight-name">Academician Tieniu Tan</strong>, is a collaborative and multi-institutional research team exploring a broad spectrum of topics across artificial intelligence.
-                    </p>
-                    <p class="description-text">
-                        The lab is dedicated to driving AI innovation and advancing frontiers in intelligent systems.
-                    </p>
+                    <div class="description-title">{{ t.descriptionTitle }}</div>
+                    <p class="description-text" v-html="t.descriptionText1"></p>
+                    <p class="description-text">{{ t.descriptionText2 }}</p>
                 </div>
                 <div class="description-right">
-                    <div class="description-subtitle">Lab Composition</div>
+                    <div class="description-subtitle">{{ t.descriptionSubtitle }}</div>
+                    <p class="description-text">{{ t.descriptionText3 }}</p>
                     <p class="description-text">
-                        PRLab draws on talent from two major institutions:
+                        <a href="http://www.cripac.ia.ac.cn/CN/model/index.htm" class="highlight-link-casia" target="_blank" rel="noopener noreferrer"><strong class="highlight-casia">{{ t.casiaName }}</strong></a> – <a href="https://www.ia.ac.cn/" class="highlight-link-casia" target="_blank" rel="noopener noreferrer">{{ t.casiaLink }}</a>
                     </p>
                     <p class="description-text">
-                        <a href="http://www.cripac.ia.ac.cn/CN/model/index.htm" class="highlight-link-casia" target="_blank" rel="noopener noreferrer"><strong class="highlight-casia">PRLab@CASIA</strong></a> – <a href="https://www.ia.ac.cn/" class="highlight-link-casia" target="_blank" rel="noopener noreferrer">Institute of Automation, Chinese Academy of Sciences</a>
-                    </p>
-                    <p class="description-text">
-                        <a href="/nju/" class="highlight-link-nju" target="_blank" rel="noopener noreferrer"><strong class="highlight-nju">PRLab@NJU</strong></a> – <a href="https://is.nju.edu.cn/" class="highlight-link-nju" target="_blank" rel="noopener noreferrer">School of Intelligent Science and Technology, Nanjing University</a>
+                        <a href="/nju/" class="highlight-link-nju" target="_blank" rel="noopener noreferrer"><strong class="highlight-nju">{{ t.njuName }}</strong></a> – <a href="https://is.nju.edu.cn/" class="highlight-link-nju" target="_blank" rel="noopener noreferrer">{{ t.njuLink }}</a>
                     </p>
                 </div>
             </div>
@@ -109,6 +103,13 @@
     line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
+    transition: font-family 0.3s ease;
+}
+
+.main-title.chinese-font {
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', 'STHeiti', 'SimHei', 'WenQuanYi Micro Hei', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .subtitle {
@@ -306,6 +307,9 @@
 </style>
 
 <script>
+import { computed } from 'vue'
+import { useI18n } from './i18n/index.js'
+import { locale } from './locale.js'
 import HomeNav from './components/HomeNav.vue'
 import HomeButtons from './components/HomeButtons.vue'
 import ScrollDownArrow from './components/ScrollDownArrow.vue'
@@ -315,6 +319,14 @@ export default {
         HomeNav,
         HomeButtons,
         ScrollDownArrow
+    },
+    setup() {
+        const t = useI18n('Home')
+        
+        return {
+            t,
+            locale
+        }
     }
 }
 </script>
