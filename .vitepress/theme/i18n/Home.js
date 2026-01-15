@@ -3,7 +3,7 @@ export default {
     mainTitle: '模式识别实验室',
     subtitle: '南京大学智科院 · 中科院自动化所',
     descriptionTitle: '关于实验室',
-    descriptionText1: '<strong class="highlight-lab">模式识别实验室（PRLab）</strong>源自于模式识别国家重点实验室<strong class="highlight-lab">谭铁牛</strong>院士团队， 其前身为智能感知与计算研究中心。实验室以人类智能的基本形态、人工智能的核心内容---模式识别为主要研究领域，坚持“四个面向”的战略导向，坚持国际一流的发展目标，致力于打造在模式识别与人工智能领域具有全球影响力的国家战略科技力量。',
+    descriptionText1: '<strong class="highlight-lab">模式识别实验室（PRLab）</strong>是在<strong class="highlight-name">谭铁牛院士</strong>领衔下组建的跨机构协同科研团队，围绕人工智能领域开展系统性研究，研究方向涵盖模式识别及相关的多个人工智能前沿方向。实验室致力于推动人工智能创新，持续拓展智能系统研究的理论边界与应用前沿，坚持“四个面向”的战略导向和国际一流的发展目标，努力建设在模式识别与人工智能领域具有全球影响力的国家战略科技力量。',
     descriptionText2: '',
     descriptionSubtitle: '实验室组成',
     descriptionText3: 'PRLab在两个机构下设立：',
