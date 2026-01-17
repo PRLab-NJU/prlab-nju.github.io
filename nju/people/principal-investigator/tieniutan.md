@@ -15,7 +15,7 @@ links:
     icon: "email"
 brief-intro:
   en: "Professor TAN Tieniu is the Chair of Nanjing University CPC Council. Prior to this position, he served as Deputy Director (Vice Minister) of the Liaison Office of the Central People’s Government in the Hong Kong Special Administrative Region, Vice President of the Chinese Academy of Sciences (CAS), Deputy Secretary-General of CAS, Director-General of the CAS Institute of Automation (CASIA) and Director of the National Laboratory of Pattern Recognition of CASIA."
-  zh: "谭铁牛教授是南京大学党委书记。在此之前，他曾担任中央人民政府驻香港特别行政区联络办公室副主任、中国科学院副院长、中国科学院副秘书长、中国科学院自动化研究所（CASIA）所长以及中国科学院自动化研究所国家模式识别重点实验室主任。"
+  zh: "谭铁牛，教授，博士生导师，中国科学院院士、英国皇家工程院外籍院士、发展中国家科学院(TWAS)院士、巴西科学院外籍院士。"
 phone: "+86-10-82544587"
 address:
   en: "Intelligent Building, 95 Zhongguancun East Road, Haidian District, BEIJING, CHINA"
