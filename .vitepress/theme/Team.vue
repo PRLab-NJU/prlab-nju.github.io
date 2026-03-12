@@ -160,6 +160,7 @@ export default {
                 'Yanbo Fan',
                 'Yuqi Fang',
                 'Chenyang Si',
+                'Xiaoming Li',
                 'Yueming Lv',
                 'Chaoyou Fu'
             ];
