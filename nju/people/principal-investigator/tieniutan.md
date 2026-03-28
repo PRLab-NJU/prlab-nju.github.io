@@ -5,8 +5,8 @@ name:
   zh: "谭铁牛"
 image: "/assets/people/tieniutan.jpg"
 title:
-  en: "Principal Investigator"
-  zh: "首席研究员"
+  en: "Professor"
+  zh: "教授"
 category: "Principal Investigator"
 links:
   - link: "https://scholar.google.com/citations?user=W-FGd_UAAAAJ"
